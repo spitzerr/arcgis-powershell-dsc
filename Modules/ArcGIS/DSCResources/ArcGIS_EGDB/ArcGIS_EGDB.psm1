@@ -220,7 +220,7 @@ function Set-TargetResource
             Assign-SchemaPrivilegesForSqlUser -ConnString $DbConnString -UserName $DatabaseUserName -Schema $schema
 
         }else {
-            $TestConnString = Create-DatabaseConnectionString -Server $DatabaseServer -Database $DatabaseName -UserName $DatabaseUserName -Password $DatabaseUserPassword
+            $TestConnString = Create-DatabaseConnectionString -Server $DatabaseServer -Database $DatabaseName -Credential $DatabaseUser
             try {
                 Test-Login -ConnString $TestConnString
                 Write-Verbose "User account $DatabaseUserName is a valid login"
@@ -609,6 +609,7 @@ function Register-EGDBWithServerSite
    [System.Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
    [System.Reflection.Assembly]::LoadWithPartialName("System.Net") | Out-Null
    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
+   [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls
     ###
     ### Check that the system publishing tool is available
     ###
